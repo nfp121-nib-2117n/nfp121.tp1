@@ -20,6 +20,8 @@ public class Picture {
     private Square window;
     private Triangle roof;
     private Circle sun;
+    
+    private Circle secondSun;
 
     /**
      * Constructor for objects of class Picture
@@ -32,6 +34,10 @@ public class Picture {
      * Draw this picture.
      */
     public void draw() {
+        
+        // Erase the drawn shapes if they are found so we have a clear canvas each time we redraw
+        eraseAll();
+        
         wall = new Square();
         wall.moveVertical(80);
         wall.changeSize(100);
@@ -50,11 +56,30 @@ public class Picture {
         roof.makeVisible();
 
         sun = new Circle();
-        sun.changeColor("yellow");
+        sun.changeColor("blue");
         sun.moveHorizontal(180);
         sun.moveVertical(-10);
         sun.changeSize(60);
         sun.makeVisible();
+        
+        secondSun = new Circle();
+        secondSun.changeColor("yellow");
+        secondSun.moveVertical(-10);
+        secondSun.changeSize(60);
+        secondSun.makeVisible();
+    }
+    
+    /**
+     * Erase all the drawn shapes
+     */
+    private void eraseAll() {
+        if (wall != null && window != null && roof != null && sun != null && secondSun != null) {
+            wall.makeInvisible();
+            window.makeInvisible();
+            roof.makeInvisible();
+            sun.makeInvisible();
+            secondSun.makeInvisible();
+        }
     }
 
     /**
@@ -67,6 +92,7 @@ public class Picture {
             window.changeColor("white");
             roof.changeColor("black");
             sun.changeColor("black");
+            secondSun.changeColor("black");
         }
     }
 
@@ -79,8 +105,22 @@ public class Picture {
             wall.changeColor("red");
             window.changeColor("black");
             roof.changeColor("green");
-            sun.changeColor("yellow");
+            sun.changeColor("blue");
+            secondSun.changeColor("yellow");
         }
     }
 
+    /**
+     * Slowly make the blue sun go down
+     */
+    public void blueSunSet(int distance) {
+        if (secondSun != null) { 
+            // Check if our sun is already painted.
+            sun.slowMoveVertical(distance);
+        }else{
+            // If the draw method wasn't called before calling the blueSunSet method call it to instantiate our variables.
+            draw();
+            sun.slowMoveVertical(distance);
+        }
+    }
 }
